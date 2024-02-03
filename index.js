@@ -2,9 +2,11 @@ const express  = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors')
+const path = require('path')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static(path.join(__dirname, 'build')))
 
 morgan.token('person', function(req, res){
     return JSON.stringify(req.person)
@@ -49,7 +51,7 @@ const info =()=>{
 }
 
 app.get('/',(request, response)=>{
-    response.send('<h1>Hello World!</h1>')
+    response.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 //Get array
 app.get('/api/persons', (request, response)=>{
