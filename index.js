@@ -2,7 +2,7 @@ const express  = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors')
-const path = require('path')
+const path = require('path');
 
 app.use(express.json())
 app.use(cors())
@@ -103,7 +103,12 @@ app.post('/api/persons', (request, response)=>{
     response.json(person)
 })
 
-app.put()
+app.put('/api/persons', (req,res)=>{
+    const datos = req.body
+    
+    console.log(datos)
+    res.send('Datos actualiados correctamente')
+})
 
 app.get('/info', (request,response)=>{
     response.send(info())
