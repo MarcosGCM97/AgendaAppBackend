@@ -103,6 +103,8 @@ app.post('/api/persons', (request, response)=>{
     response.json(person)
 })
 
+app.put()
+
 app.get('/info', (request,response)=>{
     response.send(info())
 })
