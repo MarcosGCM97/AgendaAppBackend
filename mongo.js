@@ -25,7 +25,13 @@ const person = new Person({
     number: '6586-324-5123'
 })
 
-person.save().then(result => {
+/*person.save().then(result => {
     console.log('person saved!', result)
+    mongoose.connection.close()
+})*/
+Person.find({}).then(result=>{
+    result.forEach(person =>{
+        console.log(person)
+    })
     mongoose.connection.close()
 })

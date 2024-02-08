@@ -3,10 +3,28 @@ const app = express();
 const morgan = require('morgan');
 const cors = require('cors')
 const path = require('path');
+const mongoose = require('mongoose')
+require('dotenv').config()
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static(path.join(__dirname, 'build')))
+
+//Mongo Data Base
+const password = process.argv[2]
+
+const url = 
+    `mongodb+srv://marcoscongregado:${password}@cluster0.4h79rpg.mongodb.net/?retryWrites=true&w=majority`
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url)
+
+const personShema = new mongoose.Schema({
+    name: String,
+    number: String
+})
+
+const Person = mongoose.model('Person', personShema)
 
 morgan.token('person', function(req, res){
     return JSON.stringify(req.person)
@@ -55,7 +73,10 @@ app.get('/',(request, response)=>{
 })
 //Get array
 app.get('/api/persons', (request, response)=>{
-    response.send(persons)
+    //response.send(persons)
+    Person.find({}).then(person=>{
+        response.json(person)
+    })
 })
 //Get individual
 app.get('/api/persons/:id', (request, response)=>{
