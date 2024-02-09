@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.static(path.join(__dirname, 'build')))
 
 //Mongo Data Base
-const password = process.argv[2]
+const password = process.env.DB_PASSWORD
 
 const url = 
     `mongodb+srv://marcoscongregado:${password}@cluster0.4h79rpg.mongodb.net/?retryWrites=true&w=majority`
@@ -33,7 +33,7 @@ morgan.token('person', function(req, res){
 app.use(morgan(':method :url :status :res[content-lenght] :response-time :person'))
 
 let persons= [
-    {
+    /*{
         "name": "Arto Hellas",
         "number": "040-123456",
         "id": 1
@@ -57,7 +57,7 @@ let persons= [
         "name": "Marcos gabriel Congregado",
         "number": "3543650722",
         "id": 5
-    }
+    }*/
 ]
 
 const info =()=>{
@@ -70,6 +70,7 @@ const info =()=>{
 
 app.get('/',(request, response)=>{
     response.sendFile(path.join(__dirname, 'build', 'index.html'))
+
 })
 //Get array
 app.get('/api/persons', (request, response)=>{
@@ -77,6 +78,7 @@ app.get('/api/persons', (request, response)=>{
     Person.find({}).then(person=>{
         response.json(person)
     })
+    console.log('hola')
 })
 //Get individual
 app.get('/api/persons/:id', (request, response)=>{
