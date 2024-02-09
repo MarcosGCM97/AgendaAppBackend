@@ -78,7 +78,7 @@ app.get('/api/persons', (request, response)=>{
     Person.find({}).then(person=>{
         response.json(person)
     })
-    console.log('hola')
+    console.log(request)
 })
 //Get individual
 app.get('/api/persons/:id', (request, response)=>{
