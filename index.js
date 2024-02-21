@@ -1,30 +1,14 @@
+require('dotenv').config()
 const express  = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors')
 const path = require('path');
-const mongoose = require('mongoose')
-require('dotenv').config()
+const Person = require('./models/person')
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static(path.join(__dirname, 'build')))
-
-//Mongo Data Base
-const password = process.env.DB_PASSWORD
-
-const url = 
-    `mongodb+srv://marcoscongregado:${password}@cluster0.4h79rpg.mongodb.net/?retryWrites=true&w=majority`
-
-mongoose.set('strictQuery', false)
-mongoose.connect(url)
-
-const personShema = new mongoose.Schema({
-    name: String,
-    number: String
-})
-
-const Person = mongoose.model('Person', personShema)
 
 morgan.token('person', function(req, res){
     return JSON.stringify(req.person)
@@ -82,21 +66,27 @@ app.get('/api/persons', (request, response)=>{
 })
 //Get individual
 app.get('/api/persons/:id', (request, response)=>{
-    const id = Number(request.params.id)
+    /*const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
     
     if(person){
         response.json(person)
     } else {
         response.status(404).end()
-    }
+    }*/
+    Person.findById(request.params.id).then( person => {
+        response.json(person)
+    })
 })
 //Delete individual
 app.delete('/api/persons/:id', (request, response)=>{
-    const id = Number(request.params.id)
+    /*const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
 
-    response.status(204).end()
+    response.status(204).end()*/
+    Person.filter(request.param.id).then(person=>{
+        response.json(person)
+    })
 })
 //Post solicitud
 app.post('/api/persons', (request, response)=>{
@@ -104,26 +94,29 @@ app.post('/api/persons', (request, response)=>{
 
     const body = request.body
     
-    if(!body.name){
+    if(body.name === undefined){
         return response.status(400).json({
             error: 'content missing'
         })
     }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
         id: maxId
-    }
+    })
 
-    persons = persons.concat(person)
+    person.save().then(savedPerson =>{
+        response.json(savedPerson)
+    })
+    /*persons = persons.concat(person)
 
     request.person = {
         name: request.body.name,
         number: request.body.number
     }
 
-    response.json(person)
+    response.json(person)*/
 })
 
 app.put('/api/persons', (req,res)=>{
@@ -138,6 +131,6 @@ app.get('/info', (request,response)=>{
 })
 
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
