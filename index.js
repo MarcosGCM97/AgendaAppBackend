@@ -98,6 +98,7 @@ app.get('/api/persons/:id', (request, response, next)=>{
         })
         .catch(error => next(error))
 })
+
 //Delete individual
 app.delete('/api/persons/:id', (request, response, next)=>{
     /*const id = Number(request.params.id)
@@ -110,6 +111,7 @@ app.delete('/api/persons/:id', (request, response, next)=>{
         })
         .catch(error => next(error))
 })
+
 //Post solicitud
 app.post('/api/persons', (request, response)=>{
     const maxId = Math.floor(Math.random() * 100)
@@ -141,7 +143,7 @@ app.post('/api/persons', (request, response)=>{
     response.json(person)*/
 })
 
-app.put('/api/persons', (request, response, next)=>{
+app.put('/api/persons/:id', (request, response, next)=>{
     const body = request.body
     
     const person = {
