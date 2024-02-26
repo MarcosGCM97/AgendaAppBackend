@@ -18,7 +18,7 @@ app.use(morgan(':method :url :status :res[content-lenght] :response-time :person
 
 //handle error
 const errorHandler = (error, req, res, next) => {
-    console.error(error.message)
+    console.error(error.message, 'hola')
 
     if(error.name === 'CastError'){
         return res.status(400).send({error: 'malformatted id'})
@@ -118,14 +118,13 @@ app.delete('/api/persons/:id', (request, response, next)=>{
 //Post solicitud
 app.post('/api/persons', (request, response, next)=>{
     const maxId = Math.floor(Math.random() * 100)
-
     const body = request.body
     
-    if(body.name === undefined){
+    /*if(body.name === undefined){
         return response.status(400).json({
             error: 'content missing'
         })
-    }
+    }*/
 
     const person = new Person({
         name: body.name,
@@ -158,8 +157,8 @@ app.put('/api/persons/:id', (request, response, next)=>{
     }*/
     
     Person.findByIdAndUpdate(
-        request.params.id, person, 
-        { name, number},
+        request.params.id, 
+        { name, number },
         { new: true, runValidators: true, context: 'query' }
     )
         .then(updatedPerson => {

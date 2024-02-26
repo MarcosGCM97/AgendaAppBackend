@@ -2,6 +2,5 @@ POST https://test-agenda-backend.onrender.com/api/persons
 Content-Type: application/json
 
 {
-    "name":"Marcos",
     "number": "54-3543-650722"
 }
