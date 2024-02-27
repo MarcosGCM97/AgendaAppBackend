@@ -15,15 +15,28 @@ mongoose.connect(url)
         console.log('error connecting to MongoDB', error.message)
     })
 
+
 const personShema = new mongoose.Schema({
     name: {
         type: String,
+        minlength: [3, 'Type more than {VALUE} characters'],
         required: true
     },
     number:{
         type: String,
-        required: true
+        minlength:[8],
+        required: true,
+        validate: {
+            validator: function(value){
+                return /^\d{2,3}-\d+$/.test(value)
+            }
+        }
     }
+})
+
+personShema.pre('save', function(next){
+    console.log('its a error')
+    next()
 })
 
 personShema.set('toJSON',{
